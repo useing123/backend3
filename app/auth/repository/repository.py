@@ -34,3 +34,17 @@ class AuthRepository:
             }
         )
         return user
+
+    def update_user_data(self, user_id: str, updated_data: dict) -> None:
+        payload = {
+            "phone": updated_data.get("phone"),
+            "name": updated_data.get("name"),
+            "city": updated_data.get("city"),
+        }
+        self.database["users"].update_one(
+            {
+                "_id": ObjectId(user_id),
+            },
+            {"$set": payload},
+        )
+
