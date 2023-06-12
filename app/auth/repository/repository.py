@@ -47,4 +47,15 @@ class AuthRepository:
             },
             {"$set": payload},
         )
-
+    def create_shanyrak(self, data: dict) -> str:
+        payload = {
+            "type": data["type"],
+            "price": data["price"],
+            "address": data["address"],
+            "area": data["area"],
+            "rooms_count": data["rooms_count"],
+            "description": data["description"],
+        }
+        result = self.database["shanyraks"].insert_one(payload)
+        ad_id = str(result.inserted_id)
+        return ad_id
