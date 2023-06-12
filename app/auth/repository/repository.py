@@ -1,8 +1,7 @@
 from datetime import datetime
-
 from bson.objectid import ObjectId
 from pymongo.database import Database
-
+from bson import ObjectId
 from ..utils.security import hash_password
 
 
@@ -47,6 +46,7 @@ class AuthRepository:
             },
             {"$set": payload},
         )
+        
     def create_shanyrak(self, data: dict) -> str:
         payload = {
             "type": data["type"],
@@ -59,3 +59,27 @@ class AuthRepository:
         result = self.database["shanyraks"].insert_one(payload)
         ad_id = str(result.inserted_id)
         return ad_id
+
+    def get_advertisement_by_id(self, ad_id: str) -> dict | None:
+        ad = self.database["shanyraks"].find_one(
+            {
+                "_id": ObjectId(ad_id),
+            }
+        )
+        return ad
+
+    def update_advertisement_data(self, ad_id: str, updated_data: dict) -> None:
+        payload = {
+            "type": updated_data.get("type"),
+            "price": updated_data.get("price"),
+            "address": updated_data.get("address"),
+            "area": updated_data.get("area"),
+            "rooms_count": updated_data.get("rooms_count"),
+            "description": updated_data.get("description"),
+        }
+        self.database["shanyraks"].update_one(
+            {
+                "_id": ObjectId(ad_id),
+            },
+            {"$set": payload},
+        )

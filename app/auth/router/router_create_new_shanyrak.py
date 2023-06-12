@@ -1,7 +1,5 @@
 from fastapi import Depends, HTTPException, status
-
 from app.utils import AppModel
-
 from ..service import Service, get_service
 from . import router
 
